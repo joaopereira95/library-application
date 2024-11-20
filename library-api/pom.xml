@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.elotech.oxy</groupId>
-	<artifactId>library</artifactId>
+	<artifactId>library-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Library</name>
+	<name>Library API</name>
 	<description>Gestão de Biblioteca com Recomendação de Livros</description>
 	<url/>
 	<licenses>

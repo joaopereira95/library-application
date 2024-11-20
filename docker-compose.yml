@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  library-db:
+    image: postgres
+    volumes:
+      - ./database-creation.sql:/docker-entrypoint-initdb.d/database-creation.sql
+    environment:
+      POSTGRES_PASSWORD: "root"
+    ports:
+      - "5432:5432"    
+    networks:
+    - library-network
+
+  library-api:
+    build: 
+      context: library-api/
+      dockerfile: Dockerfile
+    image: library-api
+    restart: always
+    container_name: library-api
+    ports:
+    - 8080:8080
+    networks:
+    - library-network
+    environment:
+      - spring.datasource.url=jdbc:postgresql://library-db:5432/library
+      - spring.datasource.username=postgres
+      - spring.datasource.password=root
+    depends_on:
+    - library-db
+  
+  library-ui:
+    build: 
+      context: library-ui/
+      dockerfile: Dockerfile
+    image: library-ui
+    container_name: library-ui
+    networks:
+    - library-network
+    ports:
+    - 3000:3000
+    depends_on:
+    - library-api
+    - library-db
+  
+networks:
+  library-network:
