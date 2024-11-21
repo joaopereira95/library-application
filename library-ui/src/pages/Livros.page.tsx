@@ -12,6 +12,7 @@ import { CadastroLivroModel } from '../model/CadastroLivro.model';
 
 import TabelaLivros from '../component/livros/locais/TabelaLivros';
 import CadastroLivros from '../component/livros/locais/CadastroLivros';
+import { Problem } from '../model/Problem.model';
 
 function LivrosPage() {
   const [loading, setLoading] = useState(false);
@@ -26,10 +27,6 @@ function LivrosPage() {
   const MSG_LIVRO_CADASTRADO_COM_SUCESSO = 'O livro foi cadastrado com sucesso!';
   const MSG_LIVRO_ATUALIZADO_COM_SUCESSO = 'O livro foi atualizado com sucesso!';
   const MSG_LIVRO_EXCLUIDO_COM_SUCESSO = 'O livro foi excluído com sucesso!';
-  const MSG_ERRO_CADASTRO_LIVRO = 'Ocorreu um erro ao cadastrar o livro.';
-  const MSG_ERRO_ATUALIZACAO_LIVRO = 'Ocorreu um erro ao atualizar o livro.';
-  const MSG_ERRO_EXCLUSAO_LIVRO = 'Ocorreu um erro ao excluir o livro.';
-  const MSG_ERRO_AO_BUSCAR_LIVROS = 'Ocorreu um erro ao buscar os livros.';
 
   const closeLoading = () => {
     setLoading(false);
@@ -76,8 +73,8 @@ function LivrosPage() {
         openSuccessMessage(MSG_LIVRO_CADASTRADO_COM_SUCESSO);      
         buscarLivros();
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_CADASTRO_LIVRO);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       })
       .finally(closeLoading);
   }
@@ -88,8 +85,8 @@ function LivrosPage() {
         openSuccessMessage(MSG_LIVRO_ATUALIZADO_COM_SUCESSO);      
         buscarLivros();
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_ATUALIZACAO_LIVRO);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       })
       .finally(closeLoading);
   }
@@ -111,6 +108,9 @@ function LivrosPage() {
   }
 
   const confirmarExclusao = () => {
+
+    openLoading();
+
     if (livroEmExclusao) {
       excluirLivro(livroEmExclusao.id)
         .then(() => {
@@ -119,9 +119,10 @@ function LivrosPage() {
           openSuccessMessage(MSG_LIVRO_EXCLUIDO_COM_SUCESSO); 
           buscarLivros();  
         })
-        .catch(() => {
-          openErrorMessage(MSG_ERRO_EXCLUSAO_LIVRO);
-        });
+        .catch((error: Problem) => {
+          openErrorMessage(error.detail);
+
+        }).finally(closeLoading)
       
     }
   };
@@ -136,8 +137,8 @@ function LivrosPage() {
       .then(response => {
         setLivros(response);
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_AO_BUSCAR_LIVROS);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       });
   };
 

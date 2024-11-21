@@ -12,6 +12,7 @@ import { CadastroUsuarioModel } from '../model/CadastroUsuario.model';
 
 import CadastroUsuarios from '../component/usuarios/CadastroUsuarios';
 import TabelaUsuarios from '../component/usuarios/TabelaUsuarios';
+import { Problem } from '../model/Problem.model';
 
 function UsuariosPage() {
   const [loading, setLoading] = useState(false);
@@ -26,10 +27,6 @@ function UsuariosPage() {
   const MSG_USUARIO_CADASTRADO_COM_SUCESSO = 'O usuário foi cadastrado com sucesso!';
   const MSG_USUARIO_ATUALIZADO_COM_SUCESSO = 'O usuário foi atualizado com sucesso!';
   const MSG_USUARIO_EXCLUIDO_COM_SUCESSO = 'O usuário foi excluído com sucesso!';
-  const MSG_ERRO_CADASTRO_USUARIO = 'Ocorreu um erro ao cadastrar o usuário.';
-  const MSG_ERRO_ATUALIZACAO_USUARIO = 'Ocorreu um erro ao atualizar o usuário.';
-  const MSG_ERRO_EXCLUSAO_USUARIO = 'Ocorreu um erro ao excluir o usuário.';
-  const MSG_ERRO_AO_BUSCAR_USUARIOS = 'Ocorreu um erro ao buscar os usuário.';
 
   const closeLoading = () => {
     setLoading(false);
@@ -71,25 +68,31 @@ function UsuariosPage() {
   };
 
   const cadastrarNovoUsuario = (usuario: CadastroUsuarioModel) => {
+
+    openLoading();
+    
     cadastrarUsuario(usuario)
       .then(() => {
         openSuccessMessage(MSG_USUARIO_CADASTRADO_COM_SUCESSO);      
         buscarUsuarios();
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_CADASTRO_USUARIO);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       })
       .finally(closeLoading);
   }
 
   const atualizarUsuarioExistente = (usuario: CadastroUsuarioModel) => {
+
+    openLoading();
+
     atualizarUsuario(usuario)
       .then(() => {
         openSuccessMessage(MSG_USUARIO_ATUALIZADO_COM_SUCESSO);      
         buscarUsuarios();
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_ATUALIZACAO_USUARIO);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       })
       .finally(closeLoading);
   }
@@ -110,7 +113,11 @@ function UsuariosPage() {
   }
 
   const confirmarExclusao = () => {
+    
     if (usuarioEmExclusao) {
+
+      openLoading();
+
       excluirUsuario(usuarioEmExclusao.id)
         .then(() => {
           setUsuarioEmExclusao(null);
@@ -118,9 +125,10 @@ function UsuariosPage() {
           openSuccessMessage(MSG_USUARIO_EXCLUIDO_COM_SUCESSO); 
           buscarUsuarios();  
         })
-        .catch(() => {
-          openErrorMessage(MSG_ERRO_EXCLUSAO_USUARIO);
-        });
+        .catch((error: Problem) => {
+          openErrorMessage(error.detail);
+
+        }).finally(closeLoading);
       
     }
   };
@@ -135,9 +143,9 @@ function UsuariosPage() {
       .then(response => {
         setUsuarios(response);
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_AO_BUSCAR_USUARIOS);
-      });
+      .catch((error: Error) => {
+        openErrorMessage(error.message);
+      })
   };
 
   useEffect(() => {

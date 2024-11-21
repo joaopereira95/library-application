@@ -12,6 +12,7 @@ import { cadastrarEmprestimo, listarEmprestimos, realizarDevolucao } from '../se
 import GerenciamentoEmprestimos from '../component/emprestimos/GerenciamentoEmprestimos';
 import TabelaEmprestimos from '../component/emprestimos/TabelaLivros';
 import { EmprestimoModel } from '../model/Emprestimo.model';
+import { Problem } from '../model/Problem.model';
 
 function EmprestimosPage() {
   const [loading, setLoading] = useState(false);
@@ -24,9 +25,6 @@ function EmprestimosPage() {
 
   const MSG_EMPRESTIMO_CADASTRADO_COM_SUCESSO = 'O empréstimo foi cadastrado com sucesso!';
   const MSG_DEVOLUCAO_REALIZADA_COM_SUCESSO = 'A devolução do empréstimo foi realizada com sucesso!';
-  const MSG_ERRO_CADASTRO_EMPRESTIMO = 'Ocorreu um erro ao cadastrar o empréstimo.';
-  const MSG_ERRO_ATUALIZACAO_EMPRESTIMO = 'Ocorreu um erro ao realizar devolução de empréstimo.';
-  const MSG_ERRO_AO_BUSCAR_EMPRESTIMOS = 'Ocorreu um erro ao buscar os empréstimos.';
 
   const closeLoading = () => {
     setLoading(false);
@@ -61,13 +59,16 @@ function EmprestimosPage() {
   };
 
   const cadastrarNovoEmprestimo = (emprestimo: CadastroEmprestimoModel) => {
+
+    openLoading();
+
     cadastrarEmprestimo(emprestimo)
       .then(() => {
         openSuccessMessage(MSG_EMPRESTIMO_CADASTRADO_COM_SUCESSO);      
         buscarEmprestimos();
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_CADASTRO_EMPRESTIMO);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       })
       .finally(closeLoading);
   }
@@ -78,7 +79,11 @@ function EmprestimosPage() {
   }
 
   const confirmarDevolucao = () => {
+    
     if (emprestimoEmDevolucao) {
+
+      openLoading();
+
       realizarDevolucao(emprestimoEmDevolucao.id)
         .then(() => {
           setEmprestimoEmDevolucao(null);
@@ -86,9 +91,10 @@ function EmprestimosPage() {
           openSuccessMessage(MSG_DEVOLUCAO_REALIZADA_COM_SUCESSO); 
           buscarEmprestimos();  
         })
-        .catch(() => {
-          openErrorMessage(MSG_ERRO_ATUALIZACAO_EMPRESTIMO);
-        });
+        .catch((error: Problem) => {
+          openErrorMessage(error.detail);
+          
+        }).finally(closeLoading);
       
     }
   };
@@ -103,8 +109,8 @@ function EmprestimosPage() {
       .then(response => {
         setEmprestimos(response);
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_AO_BUSCAR_EMPRESTIMOS);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       });
   };
 

@@ -3,6 +3,7 @@ services:
 
   library-db:
     image: postgres
+    container_name: library-db
     volumes:
       - ./database-creation.sql:/docker-entrypoint-initdb.d/database-creation.sql
     environment:

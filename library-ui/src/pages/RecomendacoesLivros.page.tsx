@@ -9,9 +9,10 @@ import { listarUsuarios } from '../service/Usuarios.service';
 
 import { UsuarioModel } from '../model/Usuario.model';
 import { listarRecomendacoesLivros } from '../service/Livros.service';
-import TabelaLivrosRecomendados from '../component/usuarios/TabelaLivrosRecomendados';
 import { LivroModel } from '../model/Livro.model';
 import TabelaUsuariosComRecomendacoes from '../component/livros/recomendacoes/TabelaUsuariosComRecomendacoes';
+import TabelaLivrosRecomendados from '../component/livros/recomendacoes/TabelaLivrosRecomendados';
+import { Problem } from '../model/Problem.model';
 
 function RecomendacoesLivrosPage() {
   const [loading, setLoading] = useState(false);
@@ -20,9 +21,6 @@ function RecomendacoesLivrosPage() {
   const [usuarios, setUsuarios] = useState<UsuarioModel[]>([]);
   const [livrosRecomendados, setLivrosRecomendados] = useState<LivroModel[]>([]);
   const [openRecommendDialog, setOpenRecommendDialog] = useState(false);
-
-  const MSG_ERRO_AO_BUSCAR_USUARIOS = 'Ocorreu um erro ao buscar os usuário.';
-  const MSG_ERRO_AO_BUSCAR_RECOMENDACOES_LIVROS = 'Ocorreu um erro ao buscar as recomendações de livros ao usuário.';
 
   const openLoading = () => {
     setLoading(true);
@@ -51,8 +49,8 @@ function RecomendacoesLivrosPage() {
       setOpenRecommendDialog(true);
       setLivrosRecomendados(recomendacoes);
 
-    }).catch(() => {
-      openErrorMessage(MSG_ERRO_AO_BUSCAR_RECOMENDACOES_LIVROS);
+    }).catch((error: Problem) => {
+      openErrorMessage(error.detail);
 
     }).finally(() => {
       closeLoading();
@@ -66,13 +64,16 @@ function RecomendacoesLivrosPage() {
   };
   
   const buscarUsuarios = () => {
+    openLoading();
+    
     listarUsuarios()
       .then(response => {
         setUsuarios(response);
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_AO_BUSCAR_USUARIOS);
-      });
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
+      })
+      .finally(closeLoading);
   };
 
   useEffect(() => {

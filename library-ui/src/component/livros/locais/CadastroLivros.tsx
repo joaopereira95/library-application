@@ -33,9 +33,8 @@ const CadastroLivros: React.FC<CadastroLivroProps> = ({ onSubmit, openErrorMessa
       try {
         const response = await listarCategorias();
         setCategorias(response);
-      } catch (error) {
-        openErrorMessage('Erro ao buscar as categorias.');
-        console.error('Erro ao buscar as categorias:', error);
+      } catch (error: any) {
+        openErrorMessage(error.detail);
       }
     };
 

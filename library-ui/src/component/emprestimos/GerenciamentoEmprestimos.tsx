@@ -45,9 +45,8 @@ const GerenciamentoEmprestimos: React.FC<GerenciamentoEmprestimosProps> = ({ onS
       try {
         const response = await listarLivros();
         setLivros(response);
-      } catch (error) {
-        openErrorMessage('Erro ao buscar os livros.');
-        console.error('Erro ao buscar os livros:', error);
+      } catch (error: any) {
+        openErrorMessage(error.detail);
       }
     };
 

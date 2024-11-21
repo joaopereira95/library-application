@@ -1,4 +1,4 @@
-FROM maven:3-openjdk-21 as maven
+FROM maven:3.9.9-amazoncorretto-21 as maven
 LABEL maintainer 'Joao Eduardo Pereira'
 
 COPY pom.xml ./pom.xml
@@ -6,7 +6,7 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn package -DskipTests=true
 
-FROM openjdk:21
+FROM amazoncorretto:21
 LABEL maintainer 'Joao Eduardo Pereira'
 WORKDIR /target
 COPY --from=maven target/*.jar ./

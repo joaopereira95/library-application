@@ -10,6 +10,7 @@ import { consultarLivrosOnlinePorTitulo, importarLivroOnline } from '../service/
 import { LivroOnlineModel } from '../model/LivroOnline.model';
 import TabelasLivrosOnline from '../component/livros/online/TabelaLivrosOnline';
 import BuscaLivrosOnline from '../component/livros/online/BuscaLivrosOnline';
+import { Problem } from '../model/Problem.model';
 
 function LivrosOnlinePage() {
   const [loading, setLoading] = useState(false);
@@ -21,9 +22,7 @@ function LivrosOnlinePage() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false); 
 
   const MSG_LIVRO_IMPORTADO_COM_SUCESSO = 'O livro foi importado com sucesso!';
-  const MSG_ERRO_IMPORTACAO_LIVRO = 'Ocorreu um erro ao importar o livro.';
   const MSG_ERRO_NENHUM_LIVRO_ENCONTRADO = 'Nenhum livro foi encontrado com o título informado.';
-  const MSG_ERRO_AO_BUSCAR_LIVROS = 'Ocorreu um erro ao buscar os livros.';
 
   const closeLoading = () => {
     setLoading(false);
@@ -61,8 +60,8 @@ function LivrosOnlinePage() {
         }
 
       })
-      .catch(() => {
-        openErrorMessage(MSG_ERRO_AO_BUSCAR_LIVROS);
+      .catch((error: Problem) => {
+        openErrorMessage(error.detail);
       })
       .finally(closeLoading);
   }
@@ -73,16 +72,20 @@ function LivrosOnlinePage() {
   }
 
   const confirmarImportacao = () => {
+
     if (livroEmImportacao) {
+
+      openLoading();
+
       importarLivroOnline(livroEmImportacao.id)
         .then(() => {
           setLivroEmImportacao(null);
           setOpenConfirmDialog(false);
           openSuccessMessage(MSG_LIVRO_IMPORTADO_COM_SUCESSO); 
         })
-        .catch(() => {
-          openErrorMessage(MSG_ERRO_IMPORTACAO_LIVRO);
-        });
+        .catch((error: Problem) => {
+          openErrorMessage(error.detail);
+        }).finally(closeLoading)
       
     }
   };

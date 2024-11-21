@@ -13,6 +13,10 @@ public class LivroOnline {
     private LocalDate dataPublicacao;
     private Categoria categoria;
 
+    public LivroOnline() {
+        super();
+    }
+
     public LivroOnline(String id, String titulo, String autor, String isbn, LocalDate dataPublicacao, Categoria categoria) {
         this.id = id;
         this.titulo = titulo;

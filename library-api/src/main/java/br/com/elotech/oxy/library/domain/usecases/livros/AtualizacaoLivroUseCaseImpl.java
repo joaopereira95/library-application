@@ -26,7 +26,7 @@ public class AtualizacaoLivroUseCaseImpl implements AtualizacaoLivroUseCase {
     public void atualizar(Integer id, Livro novoLivro) {
 
         Livro livroExistente = consultaLivrosOutboundPort.consultarPorId(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException(novoLivro.getId(), Livro.class));
+                .orElseThrow(() -> new RecursoNaoEncontradoException(id, Livro.class));
 
         Categoria categoria = consultaCategoriasOutboundPort.consultarPorId(novoLivro.getCategoria().getId())
                 .orElseThrow(() -> new RecursoNaoEncontradoException(novoLivro.getCategoria().getId(), Categoria.class));
