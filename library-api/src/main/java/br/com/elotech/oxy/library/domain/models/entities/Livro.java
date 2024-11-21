@@ -12,7 +12,7 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 300)
+    @Column(length = 500)
     private String titulo;
 
     @Column(length = 300)

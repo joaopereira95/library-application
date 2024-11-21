@@ -10,7 +10,7 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 300)
+    @Column(length = 500)
     private String nome;
 
     public Categoria() {

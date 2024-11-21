@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS categorias
 (
 
     id   INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    nome VARCHAR(300) NOT NULL
+    nome VARCHAR(500) NOT NULL
 
 );
 
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS livros
 (
 
     id              INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    titulo          VARCHAR(300) NOT NULL,
+    titulo          VARCHAR(500) NOT NULL,
     autor           VARCHAR(300) NOT NULL,
     isbn            VARCHAR(13)  NOT NULL,
     data_publicacao DATE         NOT NULL,

@@ -7,11 +7,11 @@ import java.time.LocalDate;
 public record LivroRequest(
 
         @NotBlank
-        @Size(min = 1, max = 200)
+        @Size(min = 1, max = 500)
         String titulo,
 
         @NotBlank
-        @Size(min = 1, max = 200)
+        @Size(min = 1, max = 300)
         String autor,
 
         @NotBlank

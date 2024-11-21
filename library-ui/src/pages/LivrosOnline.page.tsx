@@ -85,6 +85,8 @@ function LivrosOnlinePage() {
         })
         .catch((error: Problem) => {
           openErrorMessage(error.detail);
+          setOpenConfirmDialog(false);
+          
         }).finally(closeLoading)
       
     }
