@@ -5,6 +5,8 @@ import br.com.elotech.oxy.library.application.dtos.output.EmprestimoResponse;
 import br.com.elotech.oxy.library.application.mappers.EmprestimoMapper;
 import br.com.elotech.oxy.library.application.ports.inbound.emprestimos.CriacaoEmprestimoUseCase;
 import br.com.elotech.oxy.library.domain.models.entities.Emprestimo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Empréstimos")
 @RestController
 @RequestMapping("/emprestimos")
 public class CriacaoEmprestimoController {
@@ -25,6 +28,9 @@ public class CriacaoEmprestimoController {
         this.mapper = mapper;
     }
 
+    @Operation(
+            summary = "Cadastrar empréstimo",
+            description = "Cadastra um empréstimo")
     @PostMapping
     public ResponseEntity<EmprestimoResponse> realizar(@Valid @RequestBody EmprestimoRequest novoEmprestimo) {
 
